@@ -692,7 +692,12 @@ async def execute_hub_context_summary_generation(raw_payload: str) -> str:
                 f"{settings.OLLAMA_BASE_URL}/api/generate",
                 json={
                     "model": settings.PRIMARY_LLM_MODEL,
-                    "prompt": f"<system>{system_prompt}</system>\n{user_prompt}",
+                    "prompt": (
+                        f"<start_of_turn>user\n"
+                        f"System instructions: {system_prompt}\n\n"
+                        f"{user_prompt}<end_of_turn>\n"
+                        f"<start_of_turn>model\n"
+                    ),
                     "stream": False,
                     "options": {"temperature": 0.5, "num_predict": 120},
                 },

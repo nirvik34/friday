@@ -1,8 +1,8 @@
-# Friday : An Ambient Intelliegence
+# Friday : An Ambient Intelligence
 
 
-* **Problem Number** — 5
-* **Problem Statement** — Designing Empathetic Intelligence User Experience for Everyday Life
+* **Problem Number** — 3
+* **Problem Statement** — AI off the Grid
 * **Team name** — Team Stack Overflow
 * **Team members** — Soumya Gupta, Nirvik Goswami
 * **Institute** — Vellore Institute of Technology Chennai
@@ -21,6 +21,7 @@ The system captures passive behavioral signals (typing speed, error rate, notifi
 
 A fine-tuned RoBERTa regression model replaces heuristic scoring entirely. Trained on synthetic Android telemetry mapped to a `[0, 1]` burnout score, the model runs on-device via ONNX Runtime — no cloud call, no latency, no data exfiltration. The decision to act or stay silent happens in under 80 ms.
 
+The backend intelligence layer is powered by **Google Gemma 4** (E4B variant) running locally via Ollama — a fully open-weight model from the Gemma 4 family, providing multimodal reasoning capabilities with up to 256K context windows while keeping all inference on the local network.
 
 
 ## Project Artefacts
@@ -34,11 +35,11 @@ A fine-tuned RoBERTa regression model replaces heuristic scoring entirely. Train
 | Model | Role |
 |---|---|
 | Fine-tuned RoBERTa (ours) | On-device burnout regression (ONNX) |
-| Phi-3 Mini | Offline mobile reasoning fallback |
-| Llama 3.1 8B | Backend orchestration and summarisation |
+| **Gemma 4 E4B** (Google, via Ollama) | Backend orchestration, empathetic response generation, and summarisation |
+| Phi-3 Mini | Offline mobile reasoning fallback (ONNX) |
 | whisper.cpp | Zero-latency voice transcription (C++ binding) |
 | Coqui TTS | Empathetic voice output |
-| all-MiniLM-L6-v2 | Semantic embeddings for context retrieval |
+| all-MiniLM-L6-v2 | Semantic embeddings for context retrieval (ChromaDB) |
 
 ### Datasets used
 
@@ -70,7 +71,21 @@ FRIDAY is a three-layer distributed system designed so the critical path never l
 
 ### Layer 2 — Intelligence (Compute Hub)
 
-A FastAPI backend runs a LangGraph multi-agent pipeline with four specialized agents: Emotion, Burnout, Memory, and Context. Each agent processes its domain independently; a Fusion agent combines their outputs into a single intervention decision.
+A FastAPI backend runs a multi-agent pipeline with specialized agents: Emotion, Memory, Decision, Wellbeing, Burnout, Context, and Notification. Each agent processes its domain independently; a routing-based orchestrator combines their outputs into a single scored intervention decision.
+
+**Scoring formula** — each candidate response is scored using five weighted dimensions:
+
+```
+SCORE = (Emotional_Relevance × 0.30)
+      + (Timing             × 0.25)
+      + (Memory_Alignment   × 0.20)
+      + (Action_Quality     × 0.10)
+      + (¬Intrusiveness     × 0.15)
+```
+
+Responses below a threshold of 40 are silenced (empathetic silence). Weights are adjusted dynamically via an **RLHF-lite feedback loop** — user reactions (helpful / dismissed / ignored) shift the scoring weights in real time, making FRIDAY adaptive rather than static.
+
+**LLM backbone** — Gemma 4 E4B runs locally via Ollama, generating empathetic response candidates using turn-based prompting. The system is model-agnostic by design: ChromaDB semantic memory, SQLite KPI logging, and the scoring formula all consume plain text output regardless of which LLM sits in the slot.
 
 ### Layer 3 — Experience (Cross-device)
 
@@ -100,11 +115,15 @@ A Chrome Extension connects to the Compute Hub over secure WebSockets. It uses a
 
 **Dynamic power states** — three operating modes (Ghost, Aware, Active) trade capability for battery life based on user activity. Ghost Mode draws negligible power while still logging passive signals.
 
+**RLHF-lite adaptive weights** — user feedback shifts the scoring weights in real time. Helpful responses reinforce emotional relevance and memory; dismissed responses reduce the intrusiveness penalty. Weights are renormalized every 10 interactions to prevent drift.
+
 ## Innovation and impact
 
 ### Why this is technically novel
 
-Most ambient intelligence systems are cloud-dependent — they offload inference to keep the device lightweight, at the cost of latency and privacy. FRIDAY inverts this: the critical scoring model runs entirely on-device via ONNX, while the cloud backend handles only non-urgent reasoning tasks. The result is a system that can make real-time decisions even in airplane mode.
+Most ambient intelligence systems are cloud-dependent — they offload inference to keep the device lightweight, at the cost of latency and privacy. FRIDAY inverts this: the critical scoring model runs entirely on-device via ONNX, while the local backend handles reasoning tasks using Gemma 4 — Google's open-weight model family. The result is a system that can make real-time decisions even in airplane mode.
+
+The Gemma 4 integration is model-agnostic by design: the scoring formula, memory retrieval, and KPI logging pipeline are all LLM-independent. Swapping to any Ollama-compatible model requires changing a single configuration string.
 
 Using `whisper.cpp` C++ bindings eliminates Python GIL bottlenecks, achieving sub-second voice round-trips that pure Python implementations cannot match on mobile hardware.
 
@@ -121,6 +140,7 @@ Digital wellness and productivity tooling for Gen Z is a $10B+ market with no do
 
 Built from scratch using the following open-source technologies:
 
+* **Google Gemma 4** — local LLM reasoning (Apache 2.0)
 * **ChromaDB** — local vector memory
 * **Ollama** — localized LLM serving
 * **whisper.cpp** — high-performance audio transcription

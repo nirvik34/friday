@@ -51,11 +51,11 @@ class Settings:
     )
     PRIMARY_LLM_MODEL: str = os.getenv(
         "PRIMARY_MODEL",
-        "llama3.1:8b"
+        "gemma4:e4b"
     )
     FALLBACK_LLM_MODEL: str = os.getenv(
         "FALLBACK_MODEL",
-        "phi3:mini"
+        "gemma4:e4b"
     )
     LLM_TIMEOUT: float = float(os.getenv("LLM_TIMEOUT", "90.0"))
 

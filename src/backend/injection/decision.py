@@ -164,7 +164,7 @@ def _compute_intrusiveness(
 
 class DecisionAgent:
     """
-    Uses Ollama (Llama 3.1 8B) to generate empathetic response candidates,
+    Uses Ollama (Gemma 4 12B) to generate empathetic response candidates,
     then dynamically scores and ranks them using live context signals.
 
     Falls back to rule-based candidates if LLM is unavailable.
@@ -333,8 +333,13 @@ class DecisionAgent:
                     resp = await client.post(
                         f"{settings.OLLAMA_BASE_URL}/api/generate",
                         json={
-                            "model":  settings.FALLBACK_LLM_MODEL,
-                            "prompt": f"<system>{system_prompt}</system>\n{user_prompt}",
+                            "model":  settings.PRIMARY_LLM_MODEL,
+                            "prompt": (
+                                f"<start_of_turn>user\n"
+                                f"System instructions: {system_prompt}\n\n"
+                                f"{user_prompt}<end_of_turn>\n"
+                                f"<start_of_turn>model\n"
+                            ),
                             "stream": False,
                             "options": {"temperature": 0.7, "num_predict": 80},
                         },
