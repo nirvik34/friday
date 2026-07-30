@@ -149,7 +149,6 @@ Built from scratch using the following open-source technologies:
 Apache License 2.0 — see [LICENSE](./LICENSE) for details.
 
 
-<<<<<<< HEAD
 ## GDG Gemma Hackathon
 
 ### Gemma 4 Integration
@@ -166,8 +165,6 @@ FRIDAY leverages **Google Gemma 4 E4B** as the core reasoning engine across thre
 - 256K context window — handles complex multi-session workspace context without truncation
 - Multimodal capable — future-proofed for image and audio signal integration
 - Model-agnostic architecture — the scoring formula, memory retrieval, and KPI logging pipeline all consume plain text, making the LLM slot swappable
-=======
 
->>>>>>> 916b606c218a6ab5a28c64a25fa4809e340cedfc
 
 FRIDAY is a proof that ambient intelligence does not require surveillance. By keeping the decision loop on-device and enforcing silence as a first-class response, it demonstrates that empathetic AI means knowing when not to act — not just when to act faster.
