@@ -149,6 +149,6 @@ Built from scratch using the following open-source technologies:
 Apache License 2.0 — see [LICENSE](./LICENSE) for details.
 
 
-## Samsung EnnovateX 2026
+
 
 FRIDAY is a proof that ambient intelligence does not require surveillance. By keeping the decision loop on-device and enforcing silence as a first-class response, it demonstrates that empathetic AI means knowing when not to act — not just when to act faster.
