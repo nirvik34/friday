@@ -6,10 +6,6 @@
 * **Team name** — Team Stack Overflow
 * **Team members** — Soumya Gupta, Nirvik Goswami
 * **Institute** — Vellore Institute of Technology Chennai
-* **Final Presentation** — https://drive.google.com/file/d/1SHavfFVWFOdMEpJ8ktXQreIBMSdtjZbs/view?usp=sharing
-* **Demo Video** — https://www.youtube.com/watch?v=_jL1IqCfOOw
-* **Setup & Reproducibility Video** — https://youtu.be/uFKSZyt4N3U
-
 
 ## Project Overview
 
