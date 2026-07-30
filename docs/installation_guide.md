@@ -43,13 +43,13 @@ source venv/bin/activate        # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 3. Install the main AI model
+### 3. Install the main AI model (Gemma 4)
 
 Start Ollama in a separate terminal and pull the model:
 
 ```bash
 ollama serve
-ollama run llama3.1
+ollama run gemma4
 ```
 
 ### 4. Build the voice engine
@@ -188,7 +188,7 @@ Paste the `wss://` URL into the Android app's network settings and the Chrome ex
 ## Recommended `.env` (Backend)
 
 ```
-OLLAMA_MODEL=llama3.1
+OLLAMA_MODEL=gemma4
 WHISPER_MODEL_PATH=./whisper.cpp/models/ggml-small.bin
 BURNOUT_MODEL_PATH=./models/roberta-burnout-lora
 HOST=0.0.0.0

@@ -63,7 +63,7 @@ This eliminates the 5–10 minute cognitive ramp-up cost of context switching an
 
 FRIDAY is a distributed local inference network across two hardware tiers:
 
-- **Laptop Hub** — Llama 3.1 8B runs orchestration and memory synthesis; Whisper.cpp handles voice transcription with sub-second latency by bypassing the Python GIL entirely.
+- **Laptop Hub** — Gemma 4 E4B runs orchestration and memory synthesis; Whisper.cpp handles voice transcription with sub-second latency by bypassing the Python GIL entirely.
 - **Android Fallback** — when the hub is unreachable, Phi-3 Mini (INT4, ONNX Runtime Mobile) takes over local routing on-device using byte-level BPE tokenization and proper `int64` tensor construction. Telemetry is buffered in an encrypted Room DB.
 - **Sync Safety** — on reconnect, the Room DB flushes in strict write-order before any reasoning resumes, preventing race conditions on stale data.
 - **Private Networking** — cross-network fallback uses Tailscale or ZeroTier mesh VPN. No data passes through a third-party relay at any point.

@@ -4,7 +4,7 @@
 
 ## Executive Summary & Design Philosophy
 
-FRIDAY is an ambient, privacy-first, cross-device AI system addressing Samsung EnnovateX 2026 Problem Statement 5: Designing Empathetic Intelligence User Experience for Everyday Life.
+FRIDAY is an ambient, privacy-first, cross-device AI system built for the GDG Gemma Hackathon, addressing the challenge of designing empathetic intelligence user experiences for everyday life.
 
 Traditional digital assistants are reactive, session-based, and context-blind. FRIDAY acts as a system-level ambient intelligence layer running across Android (mobile) and Chrome/Workstation Hub (laptop), monitoring behavioral signals to offer proactive assistance while preserving cognitive bandwidth.
 
@@ -19,7 +19,7 @@ All inference runs locally on consumer-grade hardware. No cloud APIs. No data ex
 
 | Model | Source | Size | Format | Deployment | Purpose |
 |-------|--------|------|--------|------------|---------|
-| **Llama 3.1 8B** | Meta (Open) | 5.2 GB | INT4 GGUF via Ollama | Workstation Hub | Decision reasoning, prompt synthesis, response generation |
+| **Gemma 4 E4B** | Google DeepMind (Open, Apache 2.0) | ~5 GB | INT4 GGUF via Ollama | Workstation Hub | Decision reasoning, prompt synthesis, response generation |
 | **Phi-3 Mini** | Microsoft (Open) | 2.3 GB | INT4 ONNX | Android Device | Offline fallback reasoning when hub disconnected |
 | **roberta-base** | HuggingFace (PEFT/LoRA) | 340 MB | PyTorch | Workstation Hub | Fine-tuning for burnout score regression from telemetry |
 | **all-MiniLM-L6-v2** | Sentence-Transformers (Open) | 90 MB | ONNX Runtime | Workstation Hub | 384-dim embeddings for semantic memory (ChromaDB) |
@@ -27,7 +27,7 @@ All inference runs locally on consumer-grade hardware. No cloud APIs. No data ex
 
 **Model Selection Rationale:**
 
-Llama 3.1 8B outperforms all smaller models on reasoning tasks. INT4 quantization drops to ~6 GB VRAM (fits consumer laptops). Phi-3 Mini is smallest viable on-device model without severe hallucination. roberta-base fine-tuning (not DistilRoBERTa) uses PEFT/LoRA for efficient parameter update on synthetic telemetry datasets. all-MiniLM-L6-v2 provides dense semantic embeddings for memory retrieval. Whisper-Base via whisper.cpp achieves 94% ASR accuracy without Python overhead.
+Gemma 4 E4B is Google DeepMind's edge-optimized open-weight model offering multimodal reasoning with up to 256K context windows. INT4 quantization drops to ~5 GB VRAM (fits consumer laptops). Phi-3 Mini is smallest viable on-device model without severe hallucination. roberta-base fine-tuning (not DistilRoBERTa) uses PEFT/LoRA for efficient parameter update on synthetic telemetry datasets. all-MiniLM-L6-v2 provides dense semantic embeddings for memory retrieval. Whisper-Base via whisper.cpp achieves 94% ASR accuracy without Python overhead.
 
 ##   2: Multi-Agent Specialist Architecture
 
@@ -106,7 +106,7 @@ Evaluates incoming notifications. Assigns urgency scores based on app priority, 
 Transcribes audio via local whisper.cpp binary. Model: `ggml-base.bin`. Offline, no external ASR API calls. Returns transcript + confidence.
 
 **9. Decision Agent** (`src/backend/injection/decision.py`)
-Only agent invoking LLM. Gathers candidates from upstream agents. Calls Llama 3.1 8B via Ollama. Generates empathetic response text. Scores using interruption formula.
+Only agent invoking LLM. Gathers candidates from upstream agents. Calls Gemma 4 E4B via Ollama. Generates empathetic response text. Scores using interruption formula.
 
 ##   3: Orchestration & Routing Pipelines
 
@@ -129,7 +129,7 @@ Typical ContextObject from Android via WebSocket:
     "typo_rate": 0.08,
     "notification_count": 12,
     "location": "library",
-    "active_page": "https://samsung-ennovate.com/docs",
+    "active_page": "https://ai.google.dev/gemma/docs",
     "active_media": null
   },
   "user_state": {

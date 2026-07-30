@@ -49,7 +49,7 @@ The hub is the reasoning core of FRIDAY. It runs a Python FastAPI server with La
 
 ### Local Model Matrix
 
-- **Llama 3.1 8B** (Ollama, FP16/GGUF) — primary orchestrator, semantic memory synthesis, action generation
+- **Gemma 4 E4B** (Ollama, INT4 GGUF) — primary orchestrator, semantic memory synthesis, action generation
 - **RoBERTa-Small** (ONNX, PEFT/LoRA) — cognitive load scoring from typing telemetry; invoked only when Android's heuristic gate fires
 - **Whisper-Base** (whisper.cpp, C++ bindings) — sub-second voice transcription, bypasses Python GIL
 - **all-MiniLM-L6-v2** (ChromaDB) — generates semantic embeddings of workspace states for memory retrieval
@@ -78,13 +78,13 @@ ContextObject
 ```
 ### Semantic Workspace Memory — ChromaDB
 
-When a user leaves their laptop, the active workspace state is embedded into ChromaDB using `all-MiniLM-L6-v2`. On return, the Memory Agent retrieves the top-k semantic matches. Llama 3.1 processes these matches and generates a Context Card — it does not auto-restore anything. The user confirms.
+When a user leaves their laptop, the active workspace state is embedded into ChromaDB using `all-MiniLM-L6-v2`. On return, the Memory Agent retrieves the top-k semantic matches. Gemma 4 E4B processes these matches and generates a Context Card — it does not auto-restore anything. The user confirms.
 
 **Sync Safety Protocol:**
 1. Android reconnects → Room DB flush begins
 2. Flush acknowledged and committed
 3. Memory Agent invalidates any stale reads
-4. Llama 3.1 reasoning begins only after sync lock releases
+4. Gemma 4 E4B reasoning begins only after sync lock releases
 
 **Pruning:** Workspace embeddings not accessed in 30 days are expired automatically. Prevents ChromaDB bloat and stale context retrieval.
 
@@ -154,7 +154,7 @@ FRIDAY operates across three network conditions without manual configuration:
 Privacy is structural, not a setting.
 
 - **No internet permission on Android** — the app cannot transmit data to any external server
-- **All ML inference runs locally** — Llama 3.1, RoBERTa, Whisper, Phi-3 Mini all execute on local hardware
+- **All ML inference runs locally** — Gemma 4 E4B, RoBERTa, Whisper, Phi-3 Mini all execute on local hardware
 - **Content-free telemetry** — only behavioral signals are captured; message content, screen text, and media are never accessed
 - **AES-256 local storage** — all buffered telemetry in Room DB and SQLite is encrypted at rest
 - **No ngrok** — public reverse proxies are explicitly excluded; Tailscale/ZeroTier is the only cross-network path
@@ -181,7 +181,7 @@ Laptop Hub
               ├── Task Agent
               └── Decision Agent
                     └── decision.py (scoring formula + RLHF)
-        └── Llama 3.1 8B (Ollama)
+        └── Gemma 4 E4B (Ollama)
         └── RoBERTa-Small (ONNX)
         └── Whisper-Base (whisper.cpp)
         └── Coqui TTS

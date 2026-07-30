@@ -143,27 +143,24 @@ Speech-to-Text Engine<br>
 Voice interactions are processed locally using Whisper.cpp.<br>
 Framework: https://github.com/ggml-org/whisper.cpp
 
-## 15. Future Enhancements
-Samsung Ecosystem Integration<br>
-Galaxy Watch Integration<br>
+## 15. Gemma 4 Integration
 
-FRIDAY can incorporate physiological signals from Galaxy Watch devices, including:
+FRIDAY uses **Google Gemma 4 E4B** as the primary LLM backbone, running locally via Ollama.
 
-1. Heart Rate Variability (HRV)
-2. Resting Heart Rate
-3. Sleep Quality
-4. Physical Activity
-5. Stress Measurements
+### Why Gemma 4 E4B
 
-This would allow FRIDAY to combine behavioral and physiological indicators for more accurate wellbeing assessment.
+1. Open-weight model (Apache 2.0) — full transparency and reproducibility
+2. Edge-optimized — runs on consumer laptops with INT4 quantization (~5 GB VRAM)
+3. 256K context window — handles complex multi-session workspace context
+4. Multimodal capable — future-proofed for image and audio signal integration
+5. Model-agnostic slot — swappable via a single Ollama configuration string
 
-### Samsung Health Integration
+### Future Enhancements
 
-Future versions can leverage Samsung Health APIs to analyze:
+Future versions can leverage Gemma 4's multimodal capabilities to analyze:
 
-1. Daily activity levels
-2. Sleep patterns
-3. Recovery metrics
-4. Exercise consistency
-
+1. Visual workspace context (screen layout, tab arrangement)
+2. Wearable device physiological signals (HRV, sleep quality)
+3. Audio environment classification for context-aware intervention
+4. Cross-modal burnout signal fusion
 

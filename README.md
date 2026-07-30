@@ -123,9 +123,9 @@ The Gemma 4 integration is model-agnostic by design: the scoring formula, memory
 
 Using `whisper.cpp` C++ bindings eliminates Python GIL bottlenecks, achieving sub-second voice round-trips that pure Python implementations cannot match on mobile hardware.
 
-### Alignment with Samsung's ecosystem
+### Alignment with Google Gemma
 
-FRIDAY integrates naturally with Samsung Health SDK (physiological baselines), Galaxy Continuity (cross-device handoff), and Knox (enterprise security policy). The edge-compute architecture scales with device hardware — no server costs grow with user count.
+FRIDAY's backend intelligence is powered entirely by **Google Gemma 4** (E4B variant) — a fully open-weight model from Google DeepMind's Gemma family. Gemma 4 E4B provides multimodal reasoning with up to 256K context windows while remaining edge-optimized for consumer hardware. The architecture is model-agnostic by design: swapping the LLM backbone requires changing a single Ollama configuration string. All inference runs locally — no API keys, no cloud dependency, no per-request cost.
 
 ### Market context
 
@@ -149,6 +149,21 @@ Built from scratch using the following open-source technologies:
 Apache License 2.0 — see [LICENSE](./LICENSE) for details.
 
 
-## Samsung EnnovateX 2026
+## GDG Gemma Hackathon
+
+### Gemma 4 Integration
+
+FRIDAY leverages **Google Gemma 4 E4B** as the core reasoning engine across three critical pipelines:
+
+1. **Empathetic Response Generation** — Gemma 4 generates context-aware, emotionally calibrated response candidates using turn-based prompting with structured system instructions. Each candidate is scored through the interruption formula before delivery.
+2. **Multi-Agent Orchestration** — The Decision Agent invokes Gemma 4 via Ollama to synthesize outputs from upstream specialist agents (Emotion, Memory, Context, Wellbeing, Burnout, Notification) into a single coherent intervention.
+3. **Semantic Summarization** — Gemma 4 processes ChromaDB memory retrievals to generate workspace continuity cards, notification digests, and burnout recovery suggestions.
+
+**Why Gemma 4 E4B?**
+- Open-weight (Apache 2.0) — full transparency, no vendor lock-in
+- Edge-optimized — runs on consumer laptops via Ollama with INT4 quantization (~5 GB VRAM)
+- 256K context window — handles complex multi-session workspace context without truncation
+- Multimodal capable — future-proofed for image and audio signal integration
+- Model-agnostic architecture — the scoring formula, memory retrieval, and KPI logging pipeline all consume plain text, making the LLM slot swappable
 
 FRIDAY is a proof that ambient intelligence does not require surveillance. By keeping the decision loop on-device and enforcing silence as a first-class response, it demonstrates that empathetic AI means knowing when not to act — not just when to act faster.
